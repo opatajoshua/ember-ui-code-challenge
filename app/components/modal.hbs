@@ -1,0 +1,19 @@
+<div class='modal is-active' data-test-modal ...attributes>
+  <div class='modal-background'></div>
+  <div class='modal-card'>
+    <header class='modal-card-head'>
+      <p class='modal-card-title' data-test-modal-title>{{@title}}</p>
+      {{#if @closeModal}}
+        <button
+          class='delete'
+          aria-label='close'
+          type='button'
+          data-test-modal-close
+          {{on 'click' @closeModal}}
+        ></button>
+      {{/if}}
+    </header>
+    {{yield (hash content=(component 'modal/modal-content') )}}
+    {{yield (hash footer=(component 'modal/modal-footer') )}}
+  </div>
+</div>
