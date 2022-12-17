@@ -8,10 +8,13 @@ module.exports = function (app) {
     catches the Update request on a user
     PATCH "localhost:4200/api/users/1"
   */
-  usersRouter.patch('/:id', function (request) {
+  usersRouter.patch('/:id', async function (request, res) {
     // Update data from the UI
     const requestBody = request.body;
-    // res.send();
+    // fake delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // res.status(400).send("You do not have permission to change value") // simulate failed
+    res.json(requestBody);
   });
 
   /*
