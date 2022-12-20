@@ -1,8 +1,17 @@
 {{page-title 'User'}}
-  <div class="container has-text-centered">
+{{#if this.valueChangeError}}
+  <Notification
+    @type="danger"
+    data-test-user-screen="archive-failure-notify"
+    @close={{fn (mut this.valueChangeError) ''}}
+  >
+    Sorry something went wrong: {{this.valueChangeError}}. Try again later
+  </Notification>
+{{/if}}
+  <div class="container has-text-centered" data-test-user-screen="root">
     <div class="column is-3 is-offset-4">
 
-      <LinkTo @route="users">
+      <LinkTo @route="users" data-test-user-screen="back-link">
         <button class="button mb-2" type="button">
           Back to users
         </button>
@@ -11,21 +20,58 @@
       <div class="user-profile">
 
         <figure class="avatar">
-          <img src={{@model.image}} width="256px" alt="User" />
+          <img src={{@model.image}} width="256px" alt="User" data-test-user-screen="user-image" />
         </figure>
 
-        <p class="title has-text-white my-2">
+        <p class="title has-text-white my-2" data-test-user-screen="user-name">
           {{@model.name}}
         </p>
 
-        <p class="subtitle has-text-white my-2">
+        <p class="subtitle has-text-white my-2"  data-test-user-screen="user-value">
           Example Value:
           {{@model.value}}
         </p>
 
         {{!-- Place the component to archive/unarchive users here --}}
-
+        <button
+          class="button {{if @model.value 'is-primary' 'is-danger'}} {{if this.toggleValue.isRunning 'is-loading' ''}}"
+          type="button"
+           data-test-user-screen="archive-button"
+          {{on 'click' (fn (mut this.showArchiveConfirm) true)}}
+        >
+          {{if @model.value 'Unarchive' 'Archive'}}
+        </button>
       </div>
     </div>
   </div>
+  {{#if this.showArchiveConfirm}}
+    <Modal
+      @title="Confirmation!"
+      @closeModal={{fn (mut this.showArchiveConfirm) false}}
+      data-test-user-screen="archive-confirmation-modal"
+      as | modal |
+    >
+      <modal.content>
+        Are you sure you {{if @model.value 'Unarchive' 'Archive'}} <b>{{@model.name}}</b>?. Confirm to proceed.
+      </modal.content>
+      <modal.footer>
+        <button
+          class="button is-success"
+          type="button"
+          data-test-user-screen="archive-confirm-button"
+          {{on 'click' (perform this.toggleValue)}}
+        >
+          Confirm
+        </button>
+        <button
+          class="button"
+          type="button"
+          data-test-user-screen="archive-cancel-button"
+          {{on 'click' (fn (mut this.showArchiveConfirm) false)}}
+        >
+          Cancel
+        </button>
+      </modal.footer>
+    </Modal>
+  {{/if}}
 {{outlet}}

@@ -1,19 +1,20 @@
 {{page-title 'User'}}
-<div class="container">
-  <div class="columns is-centered">
+<div class="container" data-test-users-index-screen="root">
+  <div class="columns is-centered" data-test-users-index-screen="users-list">
 
     {{#each @model as |user|}}
-      <div class="column">
+      <div class="column" data-test-users-index-screen="user-item">
 
-        <LinkTo @route="users.user" @model={{user}}>
+        <LinkTo @route="users.user" @model={{user}} data-test-users-index-screen="user-link">
           <div class="user-select is-220px">
             <img
               class="is-pulled-left"
               src={{user.image}}
               width="60px"
               alt="profile-image"
+              data-test-users-index-screen="user-image"
             />
-            <p>{{user.name}}</p>
+            <p data-test-users-index-screen="user-name">{{user.name}}</p>
           </div>
         </LinkTo>
 
